@@ -3,7 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Stich PC Store Design System</title>
+  <title>Stich PC Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --charcoal-blue: #264653;
@@ -12,79 +15,133 @@
       --petal-rouge: #FF7B9C;
       --electric-rose: #DE0D92;
       --ink: #16222a;
-      --muted: #63707a;
+      --muted: #62727c;
       --line: #dce7e6;
-      --surface: #f6fbfb;
+      --surface: #f5fbfb;
       --panel: #ffffff;
       --success: #1f9d71;
-      --warning: #c87f10;
-      --shadow: 0 16px 40px rgba(38, 70, 83, 0.12);
+      --shadow: 0 18px 42px rgba(38, 70, 83, 0.13);
       --radius: 8px;
-      --font: "Inter", "Segoe UI", Tahoma, sans-serif;
+      --font: "Inter", "Noto Sans Thai", "Segoe UI", Tahoma, sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
+      min-height: 100vh;
       color: var(--ink);
       background: var(--surface);
       font-family: var(--font);
       line-height: 1.5;
+      font-weight: 500;
+      text-rendering: geometricPrecision;
+      -webkit-font-smoothing: antialiased;
     }
 
     button,
     input,
-    select {
-      font: inherit;
+    select { font: inherit; }
+
+    button { cursor: pointer; }
+
+    .view { display: none; min-height: 100vh; }
+    .view.active { display: block; }
+
+    .button {
+      min-height: 42px;
+      border: 0;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--coffee-bean);
+      background: var(--strong-cyan);
+      font-weight: 850;
+      white-space: nowrap;
     }
 
-    button {
-      cursor: pointer;
+    .button:hover { filter: brightness(0.96); }
+
+    .button.secondary {
+      color: var(--charcoal-blue);
+      background: #e8f7f6;
+      border: 1px solid #b9e9e5;
     }
 
-    .app-shell {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 24px 18px;
+    .button.dark {
       color: white;
       background: var(--charcoal-blue);
+    }
+
+    .button.full { width: 100%; }
+
+    .logout-button {
+      color: white;
+      background: var(--coffee-bean);
+      box-shadow: 0 10px 24px rgba(34, 12, 16, 0.18);
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      color: var(--ink);
+      padding: 9px 11px;
+    }
+
+    .login-view {
+      display: none;
+      min-height: 100vh;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+      background:
+        linear-gradient(135deg, rgba(78, 205, 196, 0.14), rgba(255, 123, 156, 0.08)),
+        var(--surface);
+    }
+
+    .login-view.active { display: grid; }
+
+    .login-visual {
+      padding: 48px;
+      color: white;
+      background:
+        linear-gradient(135deg, rgba(38, 70, 83, 0.96), rgba(34, 12, 16, 0.88)),
+        radial-gradient(circle at 78% 24%, rgba(78, 205, 196, 0.34), transparent 32%),
+        radial-gradient(circle at 20% 76%, rgba(255, 123, 156, 0.25), transparent 28%);
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      justify-content: space-between;
+      gap: 32px;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      min-width: 0;
     }
 
     .brand-mark {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: var(--radius);
-      background: var(--strong-cyan);
       display: grid;
       place-items: center;
       color: var(--coffee-bean);
-      font-weight: 900;
+      background: var(--strong-cyan);
+      font-weight: 950;
+      font-size: 22px;
     }
 
     .brand h1 {
       margin: 0;
-      font-size: 20px;
-      line-height: 1.1;
+      font-size: 22px;
+      line-height: 1.05;
+      letter-spacing: 0;
     }
 
     .brand span {
@@ -94,200 +151,126 @@
       margin-top: 3px;
     }
 
-    .nav {
+    .login-copy h2 {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .login-copy p {
+      max-width: 560px;
+      margin: 16px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 17px;
+    }
+
+    .palette-row {
       display: grid;
-      gap: 8px;
-    }
-
-    .nav a {
-      color: rgba(255, 255, 255, 0.82);
-      text-decoration: none;
-      padding: 10px 12px;
+      grid-template-columns: repeat(5, 1fr);
+      max-width: 520px;
       border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 42px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
     }
 
-    .nav a:hover,
-    .nav a.active {
-      background: rgba(78, 205, 196, 0.16);
-      color: white;
-    }
-
-    .sidebar-stat {
-      margin-top: auto;
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .sidebar-stat strong {
+    .palette-row span {
+      height: 56px;
       display: block;
-      font-size: 26px;
-      color: var(--strong-cyan);
     }
 
-    .content {
+    .login-panel {
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .login-card {
+      width: min(430px, 100%);
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .login-card h3 {
+      margin: 0;
+      color: var(--charcoal-blue);
+      font-size: 26px;
+    }
+
+    .login-card p {
+      margin: 5px 0 20px;
+      color: var(--muted);
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 13px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .login-hint {
+      margin-top: 14px;
+      padding: 10px 12px;
+      color: var(--charcoal-blue);
+      background: #e8f7f6;
+      border-radius: var(--radius);
+      font-size: 13px;
+    }
+
+    .store-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 390px;
+      gap: 18px;
+      padding: 22px;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    .store-main {
       min-width: 0;
-      padding: 26px;
     }
 
     .topbar {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 16px;
-      align-items: center;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
 
     .page-title h2 {
       margin: 0;
+      color: var(--charcoal-blue);
       font-size: clamp(24px, 4vw, 38px);
       line-height: 1.1;
-      color: var(--charcoal-blue);
       letter-spacing: 0;
     }
 
     .page-title p {
       margin: 6px 0 0;
       color: var(--muted);
-      max-width: 760px;
+      max-width: 720px;
     }
 
     .toolbar {
       display: flex;
-      align-items: center;
       gap: 10px;
+      align-items: center;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
 
-    .search {
-      width: min(320px, 100%);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 11px 12px;
-      color: var(--ink);
-      background: white;
-      min-height: 44px;
-    }
-
-    .select,
-    .input {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: white;
-      color: var(--ink);
-      min-height: 42px;
-      padding: 9px 10px;
-    }
-
-    .button {
-      border: 0;
-      border-radius: var(--radius);
-      min-height: 42px;
-      padding: 10px 14px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      color: var(--coffee-bean);
-      background: var(--strong-cyan);
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .button:hover {
-      filter: brightness(0.96);
-    }
-
-    .button.secondary {
-      color: var(--charcoal-blue);
-      background: #e9f7f6;
-      border: 1px solid #b7e6e2;
-    }
-
-    .button.dark {
-      color: white;
-      background: var(--charcoal-blue);
-    }
-
-    .icon-button {
-      width: 42px;
-      height: 42px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: white;
-      color: var(--charcoal-blue);
-      display: grid;
-      place-items: center;
-    }
-
-    .section {
-      margin-top: 26px;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .section-head h3 {
-      margin: 0;
-      font-size: 21px;
-      color: var(--charcoal-blue);
-    }
-
-    .section-head p {
-      margin: 3px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .tokens {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(130px, 1fr));
-      gap: 12px;
-    }
-
-    .swatch {
-      min-height: 110px;
-      border-radius: var(--radius);
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: end;
-      gap: 3px;
-      color: white;
-      box-shadow: var(--shadow);
-    }
-
-    .swatch strong {
-      font-size: 18px;
-    }
-
-    .swatch span {
-      font-size: 12px;
-      opacity: 0.78;
-      font-weight: 700;
-    }
-
-    .swatch.cyan {
-      color: var(--coffee-bean);
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 380px;
-      gap: 18px;
-      align-items: start;
-    }
+    .search { width: min(320px, 100%); }
 
     .product-grid {
       display: grid;
@@ -296,131 +279,79 @@
     }
 
     .product-card {
+      min-width: 0;
+      background: white;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: var(--panel);
+      box-shadow: 0 12px 30px rgba(38, 70, 83, 0.08);
       overflow: hidden;
-      box-shadow: 0 10px 28px rgba(38, 70, 83, 0.08);
       display: flex;
       flex-direction: column;
-      min-height: 360px;
     }
 
-    .product-art {
-      height: 132px;
+    .viewer {
+      height: 220px;
       padding: 16px;
+      display: grid;
+      place-items: center;
       background:
-        radial-gradient(circle at 80% 20%, rgba(255, 123, 156, 0.22), transparent 28%),
-        linear-gradient(135deg, rgba(78, 205, 196, 0.26), rgba(38, 70, 83, 0.12));
+        radial-gradient(circle at 88% 16%, rgba(255, 123, 156, 0.22), transparent 30%),
+        linear-gradient(135deg, rgba(78, 205, 196, 0.20), rgba(38, 70, 83, 0.08));
+    }
+
+    .viewer-inner {
+      width: 100%;
+      height: 100%;
       display: grid;
       place-items: center;
     }
 
-    .device {
-      width: 128px;
-      height: 82px;
-      border-radius: 6px;
-      background: var(--charcoal-blue);
-      border: 6px solid var(--coffee-bean);
-      box-shadow: 0 12px 24px rgba(34, 12, 16, 0.2);
-      position: relative;
-    }
-
-    .device::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: -20px;
-      width: 48px;
-      height: 8px;
-      border-radius: 2px;
-      background: var(--coffee-bean);
-      transform: translateX(-50%);
-    }
-
-    .device::after {
-      content: "";
-      position: absolute;
-      left: 26px;
-      right: 26px;
-      bottom: -28px;
-      height: 7px;
-      border-radius: 2px;
-      background: var(--charcoal-blue);
-    }
-
-    .device.chip {
-      width: 92px;
-      height: 92px;
-      border: 8px solid var(--charcoal-blue);
-      background: var(--strong-cyan);
-    }
-
-    .device.chip::before,
-    .device.chip::after {
-      display: none;
-    }
-
-    .device.tower {
-      width: 72px;
-      height: 108px;
-      border-width: 5px;
-      background: linear-gradient(var(--charcoal-blue), var(--coffee-bean));
-    }
-
-    .device.tower::before {
-      left: 50%;
-      top: 16px;
-      bottom: auto;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--strong-cyan);
-    }
-
-    .device.tower::after {
-      left: 14px;
-      right: 14px;
-      bottom: 16px;
-      height: 6px;
-      background: var(--petal-rouge);
+    .viewer img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      max-width: 260px;
+      max-height: 178px;
+      filter: drop-shadow(0 20px 24px rgba(34, 12, 16, 0.18));
     }
 
     .product-body {
       padding: 14px;
       display: flex;
+      flex: 1;
       flex-direction: column;
       gap: 10px;
-      flex: 1;
     }
 
     .badge-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
     }
 
     .badge {
       border-radius: 999px;
       padding: 4px 9px;
-      font-size: 12px;
-      font-weight: 800;
       color: var(--charcoal-blue);
-      background: #e9f7f6;
-      border: 1px solid #b7e6e2;
+      background: #e8f7f6;
+      border: 1px solid #b9e9e5;
+      font-size: 12px;
+      font-weight: 850;
     }
 
     .stock {
       color: var(--success);
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 850;
     }
 
-    .product-card h4 {
+    .product-card h3 {
       margin: 0;
       color: var(--coffee-bean);
       font-size: 18px;
+      line-height: 1.2;
     }
 
     .specs {
@@ -444,46 +375,49 @@
     .price {
       color: var(--charcoal-blue);
       font-size: 21px;
-      font-weight: 900;
+      font-weight: 950;
     }
 
-    .side-panel {
+    .cart-panel {
       position: sticky;
       top: 18px;
-      border-radius: var(--radius);
-      background: var(--panel);
+      max-height: calc(100vh - 36px);
+      display: flex;
+      flex-direction: column;
+      background: white;
       border: 1px solid var(--line);
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
 
     .panel-header {
       padding: 16px;
-      background: var(--coffee-bean);
       color: white;
+      background: var(--coffee-bean);
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
     }
 
-    .panel-header h3 {
+    .panel-header h2 {
       margin: 0;
-      font-size: 18px;
+      font-size: 20px;
     }
 
     .cart-list {
+      padding: 14px;
       display: grid;
       gap: 10px;
-      padding: 14px;
-      max-height: 310px;
       overflow: auto;
+      max-height: 310px;
     }
 
     .empty-state {
-      color: var(--muted);
-      padding: 24px 10px;
+      padding: 24px 12px;
       text-align: center;
+      color: var(--muted);
       border: 1px dashed var(--line);
       border-radius: var(--radius);
     }
@@ -493,8 +427,8 @@
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 8px;
       align-items: center;
-      border-bottom: 1px solid var(--line);
       padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
     }
 
     .cart-item:last-child {
@@ -522,16 +456,16 @@
     .qty button {
       width: 30px;
       height: 30px;
-      border-radius: var(--radius);
       border: 1px solid var(--line);
+      border-radius: var(--radius);
       background: white;
       color: var(--charcoal-blue);
-      font-weight: 900;
+      font-weight: 950;
     }
 
     .checkout {
-      border-top: 1px solid var(--line);
       padding: 14px;
+      border-top: 1px solid var(--line);
       display: grid;
       gap: 12px;
     }
@@ -542,20 +476,7 @@
       gap: 10px;
     }
 
-    .field {
-      display: grid;
-      gap: 5px;
-    }
-
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
-    .field label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-    }
+    .field.full { grid-column: 1 / -1; }
 
     .totals {
       display: grid;
@@ -567,6 +488,7 @@
 
     .total-row {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 10px;
       color: var(--muted);
@@ -576,112 +498,89 @@
     .total-row.grand {
       color: var(--coffee-bean);
       font-size: 20px;
-      font-weight: 900;
+      font-weight: 950;
     }
 
-    .components {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+    .receipt-view {
+      display: none;
+      background: #eef8f7;
+      padding: 28px 18px;
     }
 
-    .component-demo {
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
+    .receipt-view.active { display: block; }
+
+    .receipt-page {
+      width: min(820px, 100%);
+      margin: 0 auto;
       background: white;
-      padding: 14px;
-      min-height: 150px;
-      display: grid;
-      align-content: start;
-      gap: 12px;
-    }
-
-    .component-demo h4 {
-      margin: 0;
-      color: var(--charcoal-blue);
-    }
-
-    .segmented {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--line);
       border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
       overflow: hidden;
     }
 
-    .segmented button {
-      min-height: 38px;
-      border: 0;
-      background: white;
-      color: var(--muted);
-      font-weight: 800;
-    }
-
-    .segmented button.active {
-      color: var(--coffee-bean);
-      background: var(--strong-cyan);
-    }
-
-    .notice {
-      border-left: 4px solid var(--petal-rouge);
-      background: #fff1f5;
-      padding: 10px 12px;
-      border-radius: 0 var(--radius) var(--radius) 0;
-      color: var(--coffee-bean);
-      font-size: 14px;
-    }
-
-    .receipt-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(34, 12, 16, 0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      z-index: 20;
-    }
-
-    .receipt-backdrop.open {
-      display: flex;
-    }
-
-    .receipt {
-      width: min(620px, 100%);
-      max-height: 92vh;
-      overflow: auto;
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
-    }
-
     .receipt-head {
-      padding: 20px;
+      padding: 24px;
       color: white;
       background: var(--charcoal-blue);
       display: flex;
+      align-items: flex-start;
       justify-content: space-between;
-      gap: 16px;
-      align-items: start;
+      gap: 18px;
     }
 
-    .receipt-head h3 {
+    .receipt-head h1 {
       margin: 0;
-      font-size: 26px;
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .receipt-head p {
+      margin: 6px 0 0;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .receipt-status {
+      color: var(--coffee-bean);
+      background: var(--strong-cyan);
+      border-radius: var(--radius);
+      padding: 8px 10px;
+      font-weight: 900;
+      white-space: nowrap;
     }
 
     .receipt-body {
-      padding: 20px;
+      padding: 24px;
       display: grid;
-      gap: 16px;
+      gap: 18px;
     }
 
     .receipt-meta {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 12px;
+    }
+
+    .meta-box {
+      padding: 12px;
+      background: #f7fbfb;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .meta-box span {
+      display: block;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .meta-box strong {
+      display: block;
+      margin-top: 3px;
+      color: var(--charcoal-blue);
+      overflow-wrap: anywhere;
     }
 
     .receipt-table {
@@ -692,7 +591,7 @@
 
     .receipt-table th,
     .receipt-table td {
-      padding: 10px 8px;
+      padding: 11px 8px;
       border-bottom: 1px solid var(--line);
       text-align: left;
       vertical-align: top;
@@ -700,8 +599,10 @@
 
     .receipt-table th:nth-child(2),
     .receipt-table th:nth-child(3),
+    .receipt-table th:nth-child(4),
     .receipt-table td:nth-child(2),
-    .receipt-table td:nth-child(3) {
+    .receipt-table td:nth-child(3),
+    .receipt-table td:nth-child(4) {
       text-align: right;
     }
 
@@ -710,315 +611,255 @@
       justify-content: flex-end;
       gap: 10px;
       flex-wrap: wrap;
+      padding-top: 4px;
     }
 
     .toast {
       position: fixed;
       right: 18px;
       bottom: 18px;
+      z-index: 20;
       max-width: min(360px, calc(100vw - 36px));
+      padding: 12px 14px;
       color: white;
       background: var(--electric-rose);
       border-radius: var(--radius);
-      padding: 12px 14px;
       box-shadow: var(--shadow);
-      transform: translateY(120%);
+      font-weight: 850;
+      transform: translateY(130%);
       transition: transform 0.22s ease;
-      z-index: 30;
-      font-weight: 800;
     }
 
-    .toast.show {
-      transform: translateY(0);
-    }
+    .toast.show { transform: translateY(0); }
 
-    @media (max-width: 1180px) {
-      .product-grid,
-      .components {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .tokens {
-        grid-template-columns: repeat(3, minmax(130px, 1fr));
-      }
+    @media (max-width: 1160px) {
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 900px) {
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar {
-        position: static;
-        height: auto;
-        padding: 16px;
-      }
-
-      .nav {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-
-      .nav a {
-        justify-content: center;
-        font-size: 13px;
-      }
-
-      .sidebar-stat {
-        display: none;
-      }
-
-      .content {
-        padding: 18px;
-      }
-
-      .topbar,
-      .section-head {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .toolbar {
-        justify-content: stretch;
-      }
-
-      .search,
-      .select {
-        width: 100%;
-      }
-
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
-      .side-panel {
-        position: static;
-      }
+      .login-view.active { grid-template-columns: 1fr; }
+      .login-visual { min-height: 360px; padding: 28px; }
+      .store-shell { grid-template-columns: 1fr; padding: 16px; }
+      .cart-panel { position: static; max-height: none; }
+      .topbar { align-items: stretch; flex-direction: column; }
+      .toolbar { justify-content: stretch; }
+      .search { width: 100%; }
+      .logout-button { width: 100%; }
     }
 
     @media (max-width: 620px) {
-      .nav {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
       .product-grid,
-      .components,
-      .tokens,
       .field-grid,
-      .receipt-meta {
-        grid-template-columns: 1fr;
-      }
-
-      .field.full {
-        grid-column: auto;
-      }
-
-      .product-card {
-        min-height: auto;
-      }
-
-      .receipt-head {
-        flex-direction: column;
-      }
+      .receipt-meta { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .receipt-head { flex-direction: column; }
+      .receipt-table { font-size: 13px; }
+      .receipt-body { padding: 16px; }
     }
 
     @media print {
-      body * {
-        visibility: hidden;
-      }
-
-      .receipt-backdrop,
-      .receipt-backdrop * {
-        visibility: visible;
-      }
-
-      .receipt-backdrop {
-        position: static;
-        display: block;
-        background: white;
-        padding: 0;
-      }
-
-      .receipt {
-        max-height: none;
-        box-shadow: none;
-      }
-
-      .receipt-actions,
-      .icon-button {
-        display: none;
-      }
+      body { background: white; }
+      .receipt-actions { display: none; }
+      .receipt-view { padding: 0; background: white; }
+      .receipt-page { box-shadow: none; border: 0; width: 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand" aria-label="Stich PC Store">
+  <section class="login-view active" id="loginView">
+    <div class="login-visual">
+      <div class="brand">
         <div class="brand-mark">S</div>
         <div>
           <h1>Stich PC</h1>
-          <span>Computer Equipment POS</span>
+          <span>Computer Equipment Store</span>
         </div>
       </div>
 
-      <nav class="nav" aria-label="Main navigation">
-        <a class="active" href="#store">⌘ Store</a>
-        <a href="#cart">▣ Cart</a>
-        <a href="#system">◈ System</a>
-        <a href="#components">◌ UI Kit</a>
-      </nav>
-
-      <div class="sidebar-stat">
-        <span>ยอดขายวันนี้</span>
-        <strong id="salesToday">0</strong>
-        <small>บาท จากรายการที่ออกใบเสร็จ</small>
+      <div class="login-copy">
+        <h2>ร้านอุปกรณ์คอมพิวเตอร์ออนไลน์</h2>
+        <p>เลือกอุปกรณ์คอมพิวเตอร์ที่ต้องการ ใส่ตะกร้า ชำระเงิน และรับใบเสร็จคำสั่งซื้อได้ทันที</p>
       </div>
-    </aside>
 
-    <main class="content">
-      <header class="topbar" id="store">
-        <div class="page-title">
-          <h2>ระบบขายอุปกรณ์คอมพิวเตอร์</h2>
-          <p>เลือกสินค้า ใส่ข้อมูลลูกค้า ชำระเงิน และออกใบเสร็จได้ทันทีในหน้าเดียว พร้อม design tokens จากสีหลัก #4ECDC4</p>
+      <div class="palette-row" aria-label="Theme palette">
+        <span style="background:#264653"></span>
+        <span style="background:#4ECDC4"></span>
+        <span style="background:#220C10"></span>
+        <span style="background:#FF7B9C"></span>
+        <span style="background:#DE0D92"></span>
+      </div>
+    </div>
+
+    <div class="login-panel">
+      <form class="login-card" id="loginForm">
+        <h3>เข้าสู่ระบบลูกค้า</h3>
+        <p>เข้าสู่ระบบเพื่อเลือกซื้อสินค้าและติดตามคำสั่งซื้อของคุณ</p>
+        <div class="field">
+          <label for="username">อีเมลหรือชื่อผู้ใช้</label>
+          <input class="input" id="username" type="text" value="customer" autocomplete="username" required>
         </div>
-        <div class="toolbar">
-          <input class="search" id="searchInput" type="search" placeholder="ค้นหา CPU, GPU, RAM..." aria-label="ค้นหาสินค้า">
-          <select class="select" id="categoryFilter" aria-label="หมวดหมู่">
-            <option value="all">ทุกหมวดหมู่</option>
-            <option value="CPU">CPU</option>
-            <option value="GPU">GPU</option>
-            <option value="Memory">Memory</option>
-            <option value="Storage">Storage</option>
-            <option value="Monitor">Monitor</option>
-            <option value="Accessory">Accessory</option>
-          </select>
+        <div class="field">
+          <label for="password">รหัสผ่าน</label>
+          <input class="input" id="password" type="password" value="1234" autocomplete="current-password" required>
         </div>
+        <button class="button full" type="submit">เข้าสู่หน้าร้าน</button>
+        <div class="login-hint">ตัวอย่างสำหรับทดสอบ: customer / 1234</div>
+      </form>
+    </div>
+  </section>
+
+  <section class="view" id="storeView">
+    <div class="store-shell">
+      <main class="store-main">
+        <header class="topbar">
+          <div class="page-title">
+            <h2>เลือกซื้ออุปกรณ์คอมพิวเตอร์</h2>
+            <p>เลือกสินค้าที่ต้องการ ใส่ตะกร้า และยืนยันคำสั่งซื้อเหมือนเว็บช้อปปิ้งสำหรับลูกค้า</p>
+          </div>
+          <div class="toolbar">
+            <input class="input search" id="searchInput" type="search" placeholder="ค้นหา CPU, GPU, SSD..." aria-label="ค้นหาสินค้า">
+            <select class="select" id="categoryFilter" aria-label="หมวดหมู่">
+              <option value="all">ทุกหมวดหมู่</option>
+              <option value="CPU">CPU</option>
+              <option value="GPU">GPU</option>
+              <option value="Memory">Memory</option>
+              <option value="Storage">Storage</option>
+              <option value="Monitor">Monitor</option>
+              <option value="Accessory">Accessory</option>
+            </select>
+            <button class="button logout-button" id="logoutButton" type="button" aria-label="ออกจากระบบ">↪ ออกจากระบบ</button>
+          </div>
+        </header>
+
+        <div class="product-grid" id="productGrid"></div>
+      </main>
+
+      <aside class="cart-panel">
+        <div class="panel-header">
+          <h2>ตะกร้าสินค้า</h2>
+          <span id="cartCount">0 รายการ</span>
+        </div>
+        <div class="cart-list" id="cartList"></div>
+        <form class="checkout" id="checkoutForm">
+          <div class="field-grid">
+            <div class="field full">
+              <label for="customerName">ชื่อผู้รับสินค้า</label>
+              <input class="input" id="customerName" type="text" placeholder="เช่น สมชาย ใจดี" required>
+            </div>
+            <div class="field">
+              <label for="customerPhone">เบอร์โทร</label>
+              <input class="input" id="customerPhone" type="tel" placeholder="08x-xxx-xxxx">
+            </div>
+            <div class="field">
+              <label for="paymentMethod">วิธีชำระเงิน</label>
+              <select class="select" id="paymentMethod">
+                <option>โอนผ่าน QR Payment</option>
+                <option>บัตรเครดิต</option>
+                <option>ชำระเงินปลายทาง</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="customerAddress">ที่อยู่จัดส่ง</label>
+              <input class="input" id="customerAddress" type="text" placeholder="บ้านเลขที่ ถนน เขต/อำเภอ จังหวัด รหัสไปรษณีย์" required>
+            </div>
+          </div>
+          <div class="totals">
+            <div class="total-row"><span>ยอดสินค้า</span><strong id="subtotal">0 บาท</strong></div>
+            <div class="total-row"><span>VAT 7%</span><strong id="vat">0 บาท</strong></div>
+            <div class="total-row grand"><span>รวมสุทธิ</span><strong id="grandTotal">0 บาท</strong></div>
+          </div>
+          <button class="button" type="submit">ยืนยันคำสั่งซื้อ</button>
+        </form>
+      </aside>
+    </div>
+  </section>
+
+  <section class="receipt-view" id="receiptView">
+    <article class="receipt-page">
+      <header class="receipt-head">
+        <div>
+          <h1>ใบเสร็จสั่งซื้อ</h1>
+          <p>Stich PC Computer Equipment</p>
+        </div>
+        <div class="receipt-status">ชำระเงินแล้ว</div>
       </header>
-
-      <section class="section" id="system">
-        <div class="section-head">
-          <div>
-            <h3>Theme Tokens</h3>
-            <p>พาเลตหลักสำหรับแบรนด์ หน้าร้าน ปุ่ม สถานะ และใบเสร็จ</p>
-          </div>
-        </div>
-        <div class="tokens">
-          <div class="swatch" style="background:#264653"><strong>#264653</strong><span>Charcoal Blue</span></div>
-          <div class="swatch cyan" style="background:#4ECDC4"><strong>#4ECDC4</strong><span>Strong Cyan / Primary</span></div>
-          <div class="swatch" style="background:#220C10"><strong>#220C10</strong><span>Coffee Bean</span></div>
-          <div class="swatch" style="background:#FF7B9C"><strong>#FF7B9C</strong><span>Petal Rouge</span></div>
-          <div class="swatch" style="background:#DE0D92"><strong>#DE0D92</strong><span>Electric Rose</span></div>
-        </div>
-      </section>
-
-      <section class="section layout">
-        <div>
-          <div class="section-head">
-            <div>
-              <h3>Product Catalog</h3>
-              <p>สินค้า mockup สำหรับหน้าร้านคอมพิวเตอร์ พร้อมสต็อกและปุ่มเพิ่มลงตะกร้า</p>
-            </div>
-            <button class="button secondary" id="resetCart" type="button">↺ ล้างตะกร้า</button>
-          </div>
-          <div class="product-grid" id="productGrid"></div>
-        </div>
-
-        <aside class="side-panel" id="cart">
-          <div class="panel-header">
-            <h3>ตะกร้าสินค้า</h3>
-            <span id="cartCount">0 รายการ</span>
-          </div>
-          <div class="cart-list" id="cartList"></div>
-          <form class="checkout" id="checkoutForm">
-            <div class="field-grid">
-              <div class="field full">
-                <label for="customerName">ชื่อลูกค้า</label>
-                <input class="input" id="customerName" type="text" placeholder="เช่น บริษัท สติช จำกัด" required>
-              </div>
-              <div class="field">
-                <label for="paymentMethod">วิธีชำระเงิน</label>
-                <select class="select" id="paymentMethod">
-                  <option>เงินสด</option>
-                  <option>โอนเงิน</option>
-                  <option>บัตรเครดิต</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="discount">ส่วนลด</label>
-                <input class="input" id="discount" type="number" min="0" value="0">
-              </div>
-            </div>
-            <div class="totals">
-              <div class="total-row"><span>ยอดสินค้า</span><strong id="subtotal">0 บาท</strong></div>
-              <div class="total-row"><span>VAT 7%</span><strong id="vat">0 บาท</strong></div>
-              <div class="total-row"><span>ส่วนลด</span><strong id="discountDisplay">0 บาท</strong></div>
-              <div class="total-row grand"><span>รวมสุทธิ</span><strong id="grandTotal">0 บาท</strong></div>
-            </div>
-            <button class="button" type="submit">✓ ชำระเงินและออกใบเสร็จ</button>
-          </form>
-        </aside>
-      </section>
-
-      <section class="section" id="components">
-        <div class="section-head">
-          <div>
-            <h3>Component Samples</h3>
-            <p>ตัวอย่างองค์ประกอบ UI สำหรับต่อยอดเป็น design system ของหน้าร้าน</p>
-          </div>
-        </div>
-        <div class="components">
-          <div class="component-demo">
-            <h4>Buttons</h4>
-            <button class="button" type="button">Primary Action</button>
-            <button class="button dark" type="button">Dark Action</button>
-            <button class="button secondary" type="button">Secondary</button>
-          </div>
-          <div class="component-demo">
-            <h4>Controls</h4>
-            <div class="segmented" role="group" aria-label="View mode">
-              <button class="active" type="button">POS</button>
-              <button type="button">Stock</button>
-              <button type="button">Report</button>
-            </div>
-            <input class="input" type="text" value="Invoice #ST-2026">
-          </div>
-          <div class="component-demo">
-            <h4>Status</h4>
-            <span class="badge">พร้อมขาย</span>
-            <div class="notice">สินค้ากลุ่ม GPU มีโปรโมชันส่วนลดเพิ่มเมื่อซื้อครบ 2 ชิ้น</div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <div class="receipt-backdrop" id="receiptModal" role="dialog" aria-modal="true" aria-labelledby="receiptTitle">
-    <article class="receipt">
-      <div class="receipt-head">
-        <div>
-          <h3 id="receiptTitle">ใบเสร็จรับเงิน</h3>
-          <span>Stich PC Computer Equipment</span>
-        </div>
-        <button class="icon-button" id="closeReceipt" type="button" aria-label="ปิดใบเสร็จ">×</button>
-      </div>
       <div class="receipt-body" id="receiptBody"></div>
     </article>
-  </div>
+  </section>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     const products = [
-      { id: "cpu-ryzen", name: "Ryzen 7 9700X", category: "CPU", price: 12900, stock: 12, art: "chip", specs: ["8 cores / 16 threads", "AM5 socket", "เหมาะกับเกมและงานตัดต่อ"] },
-      { id: "gpu-rtx", name: "RTX 4070 Super 12GB", category: "GPU", price: 23900, stock: 6, art: "tower", specs: ["12GB GDDR6X", "Ray tracing ready", "รับประกัน 3 ปี"] },
-      { id: "ram-ddr5", name: "DDR5 32GB 6000MHz", category: "Memory", price: 3990, stock: 24, art: "chip", specs: ["2 x 16GB kit", "XMP / EXPO profile", "Latency CL36"] },
-      { id: "ssd-nvme", name: "NVMe SSD 2TB Gen4", category: "Storage", price: 4590, stock: 18, art: "chip", specs: ["Read 7400 MB/s", "Write 6500 MB/s", "ฮีตซิงก์ในตัว"] },
-      { id: "monitor-27", name: "27-inch QHD 180Hz", category: "Monitor", price: 8990, stock: 9, art: "monitor", specs: ["IPS panel", "1ms response", "Adaptive sync"] },
-      { id: "keyboard", name: "Mechanical Keyboard TKL", category: "Accessory", price: 2490, stock: 31, art: "monitor", specs: ["Hot-swappable", "PBT keycaps", "USB-C detachable"] }
+      {
+        id: "cpu-ryzen",
+        name: "AMD Ryzen 7 Processor",
+        category: "CPU",
+        price: 12900,
+        stock: 12,
+        imageType: "cpu",
+        specs: ["8 cores / 16 threads", "AM5 socket", "เหมาะกับเกมและงานตัดต่อ"]
+      },
+      {
+        id: "gpu-rtx",
+        name: "Gaming Graphics Card",
+        category: "GPU",
+        price: 23900,
+        stock: 6,
+        imageType: "gpu",
+        specs: ["12GB GDDR6X", "Ray tracing ready", "รับประกัน 3 ปี"]
+      },
+      {
+        id: "ram-ddr5",
+        name: "DDR5 Memory Kit 32GB",
+        category: "Memory",
+        price: 3990,
+        stock: 24,
+        imageType: "ram",
+        specs: ["2 x 16GB kit", "6000MHz profile", "Latency CL36"]
+      },
+      {
+        id: "ssd-nvme",
+        name: "NVMe SSD 2TB Gen4",
+        category: "Storage",
+        price: 4590,
+        stock: 18,
+        imageType: "ssd",
+        specs: ["Read 7400 MB/s", "Write 6500 MB/s", "ฮีตซิงก์ในตัว"]
+      },
+      {
+        id: "monitor-27",
+        name: "27-inch QHD Gaming Monitor",
+        category: "Monitor",
+        price: 8990,
+        stock: 9,
+        imageType: "monitor",
+        specs: ["IPS panel", "180Hz refresh rate", "Adaptive sync"]
+      },
+      {
+        id: "keyboard",
+        name: "Mechanical Keyboard TKL",
+        category: "Accessory",
+        price: 2490,
+        stock: 31,
+        imageType: "keyboard",
+        specs: ["Hot-swappable", "PBT keycaps", "USB-C detachable"]
+      }
     ];
 
     const cart = new Map();
-    const state = { salesToday: 0 };
+    let lastReceipt = null;
+
+    const productGrid = document.getElementById("productGrid");
+    const cartList = document.getElementById("cartList");
+    const cartCount = document.getElementById("cartCount");
+    const subtotalEl = document.getElementById("subtotal");
+    const vatEl = document.getElementById("vat");
+    const grandTotalEl = document.getElementById("grandTotal");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const receiptBody = document.getElementById("receiptBody");
+    const toast = document.getElementById("toast");
 
     const formatTHB = value => new Intl.NumberFormat("th-TH", {
       style: "currency",
@@ -1026,20 +867,12 @@
       maximumFractionDigits: 0
     }).format(Math.max(0, value));
 
-    const productGrid = document.getElementById("productGrid");
-    const cartList = document.getElementById("cartList");
-    const cartCount = document.getElementById("cartCount");
-    const subtotalEl = document.getElementById("subtotal");
-    const vatEl = document.getElementById("vat");
-    const discountEl = document.getElementById("discount");
-    const discountDisplay = document.getElementById("discountDisplay");
-    const grandTotalEl = document.getElementById("grandTotal");
-    const searchInput = document.getElementById("searchInput");
-    const categoryFilter = document.getElementById("categoryFilter");
-    const receiptModal = document.getElementById("receiptModal");
-    const receiptBody = document.getElementById("receiptBody");
-    const salesToday = document.getElementById("salesToday");
-    const toast = document.getElementById("toast");
+    function showView(id) {
+      document.querySelectorAll(".view, .login-view, .receipt-view").forEach(view => {
+        view.classList.toggle("active", view.id === id);
+      });
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
 
     function showToast(message) {
       toast.textContent = message;
@@ -1056,38 +889,50 @@
 
     function getTotals() {
       const subtotal = getCartRows().reduce((sum, item) => sum + item.lineTotal, 0);
-      const discount = Math.min(Number(discountEl.value || 0), subtotal);
-      const vat = Math.round((subtotal - discount) * 0.07);
-      const grand = subtotal - discount + vat;
-      return { subtotal, discount, vat, grand };
+      const vat = Math.round(subtotal * 0.07);
+      return { subtotal, vat, grand: subtotal + vat };
+    }
+
+    function productImage(type) {
+      const photos = {
+        cpu: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Intel_i9-14900KF_CPU.jpg/250px-Intel_i9-14900KF_CPU.jpg",
+        gpu: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/AMD_RX_6900XT_.jpg/250px-AMD_RX_6900XT_.jpg",
+        ram: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/2%2A8Go_DDR4_Corsair_-_2018-05-08.jpg/250px-2%2A8Go_DDR4_Corsair_-_2018-05-08.jpg",
+        ssd: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/2023_Dysk_SSD_Kingston_NV2_2TB.jpg/250px-2023_Dysk_SSD_Kingston_NV2_2TB.jpg",
+        monitor: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/LG_Flatron_W2486_%281%29.jpg/250px-LG_Flatron_W2486_%281%29.jpg",
+        keyboard: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/LenovoKeyboard.jpg/250px-LenovoKeyboard.jpg"
+      };
+
+      return photos[type] || photos.cpu;
     }
 
     function renderProducts() {
       const query = searchInput.value.trim().toLowerCase();
       const category = categoryFilter.value;
       const filtered = products.filter(product => {
-        const matchesText = [product.name, product.category, ...product.specs].join(" ").toLowerCase().includes(query);
-        const matchesCategory = category === "all" || product.category === category;
-        return matchesText && matchesCategory;
+        const text = [product.name, product.category, ...product.specs].join(" ").toLowerCase();
+        return text.includes(query) && (category === "all" || product.category === category);
       });
 
       productGrid.innerHTML = filtered.map(product => `
         <article class="product-card">
-          <div class="product-art" aria-hidden="true">
-            <div class="device ${product.art === "monitor" ? "" : product.art}"></div>
+          <div class="viewer" data-viewer="${product.id}">
+            <div class="viewer-inner">
+              <img src="${productImage(product.imageType)}" alt="${product.name}" loading="lazy">
+            </div>
           </div>
           <div class="product-body">
             <div class="badge-row">
               <span class="badge">${product.category}</span>
               <span class="stock">คงเหลือ ${product.stock}</span>
             </div>
-            <h4>${product.name}</h4>
+            <h3>${product.name}</h3>
             <ul class="specs">
               ${product.specs.map(spec => `<li>${spec}</li>`).join("")}
             </ul>
             <div class="price-row">
               <span class="price">${formatTHB(product.price)}</span>
-              <button class="button" type="button" data-add="${product.id}">＋ เพิ่ม</button>
+              <button class="button" type="button" data-add="${product.id}">เพิ่มลงตะกร้า</button>
             </div>
           </div>
         </article>
@@ -1116,9 +961,7 @@
       const totals = getTotals();
       subtotalEl.textContent = formatTHB(totals.subtotal);
       vatEl.textContent = formatTHB(totals.vat);
-      discountDisplay.textContent = formatTHB(totals.discount);
       grandTotalEl.textContent = formatTHB(totals.grand);
-      salesToday.textContent = formatTHB(state.salesToday).replace("฿", "");
     }
 
     function addToCart(productId) {
@@ -1151,26 +994,38 @@
       renderCart();
     }
 
-    function buildReceipt(customerName, paymentMethod) {
+    function buildReceipt() {
+      const customerName = document.getElementById("customerName").value.trim();
+      const customerPhone = document.getElementById("customerPhone").value.trim() || "-";
+      const customerAddress = document.getElementById("customerAddress").value.trim();
+      const paymentMethod = document.getElementById("paymentMethod").value;
       const rows = getCartRows();
       const totals = getTotals();
-      const invoiceNo = `ST-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
+      const now = new Date();
+      const invoiceNo = `ST-${now.getFullYear()}-${String(Date.now()).slice(-6)}`;
       const issuedAt = new Intl.DateTimeFormat("th-TH", {
         dateStyle: "medium",
         timeStyle: "short"
-      }).format(new Date());
+      }).format(now);
+
+      lastReceipt = { customerName, customerPhone, customerAddress, paymentMethod, rows, totals, invoiceNo, issuedAt };
 
       receiptBody.innerHTML = `
-        <div class="receipt-meta">
-          <div><strong>เลขที่ใบเสร็จ</strong><br>${invoiceNo}</div>
-          <div><strong>วันที่ออก</strong><br>${issuedAt}</div>
-          <div><strong>ลูกค้า</strong><br>${customerName}</div>
-          <div><strong>ชำระโดย</strong><br>${paymentMethod}</div>
-        </div>
+        <section class="receipt-meta">
+          <div class="meta-box"><span>เลขที่ใบเสร็จ</span><strong>${invoiceNo}</strong></div>
+          <div class="meta-box"><span>วันที่ออก</span><strong>${issuedAt}</strong></div>
+          <div class="meta-box"><span>ผู้รับสินค้า</span><strong>${customerName}</strong></div>
+          <div class="meta-box"><span>เบอร์โทร</span><strong>${customerPhone}</strong></div>
+          <div class="meta-box"><span>ที่อยู่จัดส่ง</span><strong>${customerAddress}</strong></div>
+          <div class="meta-box"><span>วิธีชำระเงิน</span><strong>${paymentMethod}</strong></div>
+          <div class="meta-box"><span>บัญชีลูกค้า</span><strong>${document.getElementById("username").value.trim() || "customer"}</strong></div>
+        </section>
+
         <table class="receipt-table">
           <thead>
             <tr>
-              <th>สินค้า</th>
+              <th>รายการสินค้า</th>
+              <th>ราคา/ชิ้น</th>
               <th>จำนวน</th>
               <th>รวม</th>
             </tr>
@@ -1178,38 +1033,49 @@
           <tbody>
             ${rows.map(item => `
               <tr>
-                <td>${item.name}<br><small>${item.category} · ${formatTHB(item.price)}</small></td>
+                <td><strong>${item.name}</strong><br><small>${item.category}</small></td>
+                <td>${formatTHB(item.price)}</td>
                 <td>${item.qty}</td>
                 <td>${formatTHB(item.lineTotal)}</td>
               </tr>
             `).join("")}
           </tbody>
         </table>
-        <div class="totals">
+
+        <section class="totals">
           <div class="total-row"><span>ยอดสินค้า</span><strong>${formatTHB(totals.subtotal)}</strong></div>
-          <div class="total-row"><span>ส่วนลด</span><strong>${formatTHB(totals.discount)}</strong></div>
           <div class="total-row"><span>VAT 7%</span><strong>${formatTHB(totals.vat)}</strong></div>
           <div class="total-row grand"><span>รวมสุทธิ</span><strong>${formatTHB(totals.grand)}</strong></div>
-        </div>
+        </section>
+
         <div class="receipt-actions">
-          <button class="button secondary" type="button" id="printReceipt">⎙ พิมพ์ใบเสร็จ</button>
-          <button class="button" type="button" id="newSale">เริ่มการขายใหม่</button>
+          <button class="button secondary" type="button" id="backToStore">เลือกซื้อสินค้าเพิ่ม</button>
+          <button class="button dark" type="button" id="printReceipt">พิมพ์ใบเสร็จ</button>
+          <button class="button" type="button" id="newSale">เริ่มคำสั่งซื้อใหม่</button>
         </div>
       `;
 
-      receiptModal.classList.add("open");
+      showView("receiptView");
       document.getElementById("printReceipt").addEventListener("click", () => window.print());
+      document.getElementById("backToStore").addEventListener("click", () => showView("storeView"));
       document.getElementById("newSale").addEventListener("click", () => {
         cart.clear();
         document.getElementById("checkoutForm").reset();
-        discountEl.value = 0;
-        receiptModal.classList.remove("open");
         renderCart();
+        showView("storeView");
       });
-
-      state.salesToday += totals.grand;
-      renderCart();
     }
+
+    document.getElementById("loginForm").addEventListener("submit", event => {
+      event.preventDefault();
+      showView("storeView");
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", () => {
+      cart.clear();
+      renderCart();
+      showView("loginView");
+    });
 
     productGrid.addEventListener("click", event => {
       const addButton = event.target.closest("[data-add]");
@@ -1229,25 +1095,11 @@
         showToast("กรุณาเพิ่มสินค้าอย่างน้อย 1 รายการ");
         return;
       }
-      const customerName = document.getElementById("customerName").value.trim();
-      const paymentMethod = document.getElementById("paymentMethod").value;
-      buildReceipt(customerName, paymentMethod);
-    });
-
-    document.getElementById("resetCart").addEventListener("click", () => {
-      cart.clear();
-      renderCart();
-      showToast("ล้างตะกร้าแล้ว");
-    });
-
-    document.getElementById("closeReceipt").addEventListener("click", () => receiptModal.classList.remove("open"));
-    receiptModal.addEventListener("click", event => {
-      if (event.target === receiptModal) receiptModal.classList.remove("open");
+      buildReceipt();
     });
 
     searchInput.addEventListener("input", renderProducts);
     categoryFilter.addEventListener("change", renderProducts);
-    discountEl.addEventListener("input", renderCart);
 
     renderProducts();
     renderCart();
